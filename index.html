@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Système solaire</title>
+
+  <!-- Anime.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+
+<body>
+  
+  <div id="info-panel">
+    <h2 id="planet-name">Clique sur un astre 🌍</h2>
+    <p id="planet-info">Découvre les planètes en cliquant dessus !</p>
+  </div>
+
+  <div class="space">
+    <div class="sun" data-name="Soleil"></div>
+
+    <div class="planet mercury" data-name="Mercure"></div>
+    <div class="planet venus" data-name="Vénus"></div>
+    <div class="planet earth" data-name="Terre"></div>
+    <div class="planet mars" data-name="Mars"></div>
+    <div class="planet jupiter" data-name="Jupiter"></div>
+    <div class="planet saturn" data-name="Saturne"></div>
+    <div class="planet uranus" data-name="Uranus"></div>
+    <div class="planet neptune" data-name="Neptune"></div>
+  </div>
+
+  <!-- ===== CSS ===== -->
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #000010, #000);
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    .space {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .sun {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #ffcc33, #ff6600);
+      border-radius: 50%;
+      box-shadow: 0 0 40px 20px rgba(255,200,50,0.8);
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+
+    .planet {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    /* Planètes */
+    .mercury { width: 10px; height: 10px; background: gray; }
+    .venus   { width: 18px; height: 18px; background: orange; }
+    .earth   { width: 20px; height: 20px; background: deepskyblue; }
+    .mars    { width: 16px; height: 16px; background: red; }
+    .jupiter { width: 35px; height: 35px; background: peru; }
+    .saturn  { width: 30px; height: 30px; background: khaki; }
+    .uranus  { width: 26px; height: 26px; background: lightblue; }
+    .neptune { width: 24px; height: 24px; background: royalblue; }
+
+    /* Panneau d'info */
+    #info-panel {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      padding: 15px;
+      width: 330px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      z-index: 10;
+    }
+
+    #info-panel h2 {
+      margin: 0 0 6px 0;
+      font-size: 18px;
+    }
+
+    #info-panel p {
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+    }
+  </style>
+
+  <!-- ===== JS ===== -->
+  <script>
+    const space = document.querySelector('.space');
+    const planets = document.querySelectorAll('.planet');
+    const sun = document.querySelector('.sun');
+
+    // étoiles  
+    for (let i = 0; i < 80; i++) {
+      const star = document.createElement('div');
+      star.style.position = 'absolute';
+      star.style.width = '2px';
+      star.style.height = '2px';
+      star.style.background = 'white';
+      star.style.borderRadius = '50%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.opacity = Math.random();
+      space.appendChild(star);
+    }
+
+    // Orbite
+    function orbit(planet, distance, duration) {
+      anime({
+        targets: planet,
+        rotate: '1turn',
+        duration,
+        easing: 'linear',
+        loop: true,
+        update: anim => {
+          const angle = (anim.progress / 100) * 2 * Math.PI;
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance;
+          planet.style.transform = `translate(${x}px, ${y}px)`;
+        }
+      });
+    }
+
+    orbit(document.querySelector('.mercury'), 100, 4000);
+    orbit(document.querySelector('.venus'),   150, 7000);
+    orbit(document.querySelector('.earth'),   210, 10000);
+    orbit(document.querySelector('.mars'),    260, 13000);
+    orbit(document.querySelector('.jupiter'), 330, 20000);
+    orbit(document.querySelector('.saturn'),  400, 25000);
+    orbit(document.querySelector('.uranus'),  470, 30000);
+    orbit(document.querySelector('.neptune'), 540, 35000);
+
+    // Infos détaillées (v2)
+    const planetInfo = {
+      Soleil: `
+        ⭐ <b>Type :</b> Étoile naine jaune<br>
+        🌡️ <b>Température surface :</b> ~ 5 500 °C<br>
+        ⚡ <b>Rôle :</b> Source d’énergie et de gravité
+      `,
+      Mercure: `
+        🟠 <b>Distance du Soleil :</b> 58 millions km<br>
+        ⏱️ <b>Durée d’orbite :</b> 88 jours terrestres<br>
+        🌡️ <b>Température :</b> -180°C à +430°C<br>
+        🧱 <b>Composition :</b> Roche métallique
+      `,
+      Vénus: `
+        💨 <b>Distance du Soleil :</b> 108 millions km<br>
+        ⏱️ <b>Durée d’orbite :</b> 225 jours terrestres<br>
+        🌫️ <b>Atmosphère :</b> CO₂ + nuages d’acide sulfurique<br>
+        🌡️ <b>Température moyenne :</b> 465°C
+      `,
+      Terre: `
+        🌍 <b>Distance du Soleil :</b> 150 millions km<br>
+        ⏱️ <b>Durée d’orbite :</b> 365 jours<br>
+        🌡️ <b>Température moyenne :</b> 15°C<br>
+        💧 <b>Spécificité :</b> Eau liquide & vie
+      `,
+      Mars: `
+        🔴 <b>Distance du Soleil :</b> 228 millions km<br>
+        ⏱️ <b>Durée d’orbite :</b> 687 jours terrestres<br>
+        🌡️ <b>Température moyenne :</b> -60°C<br>
+        🧱 <b>Surface :</b> Poussière riche en fer + glace
+      `,
+      Jupiter: `
+        🌕 <b>Distance du Soleil :</b> 778 millions km<br>
+        ⏱️ <b>Durée d’orbite :</b> ~12 ans terrestres<br>
+        💨 <b>Atmosphère :</b> Hydrogène & hélium<br>
+        ⚡ <b>Particularité :</b> Plus grande planète
+      `,
+      Saturne: `
+        ❄️ <b>Distance du Soleil :</b> 1,4 milliard km<br>
+        ⏱️ <b>Durée d’orbite :</b> ~29 ans terrestres<br>
+        💠 <b>Anneaux :</b> Glace & poussière<br>
+        🌡️ <b>Température :</b> -140°C
+      `,
+      Uranus: `
+        💎 <b>Distance du Soleil :</b> 2,9 milliards km<br>
+        ⏱️ <b>Durée d’orbite :</b> ~84 ans terrestres<br>
+        🌀 <b>Inclinaison :</b> 98° (sur le côté)<br>
+        🌡️ <b>Température :</b> -195°C
+      `,
+      Neptune: `
+        🌊 <b>Distance du Soleil :</b> 4,5 milliards km<br>
+        ⏱️ <b>Durée d’orbite :</b> ~165 ans terrestres<br>
+        💨 <b>Vents :</b> > 2000 km/h<br>
+        🌡️ <b>Température :</b> -200°C
+      `
+    };
+
+    const planetName = document.getElementById('planet-name');
+    const planetText = document.getElementById('planet-info');
+
+    function showInfo(name) {
+      planetName.textContent = name;
+      planetText.innerHTML = planetInfo[name] || "Aucune information disponible.";
+    }
+
+    planets.forEach(p => {
+      p.addEventListener('click', () => {
+        showInfo(p.dataset.name);
+      });
+    });
+
+    sun.addEventListener('click', () => {
+      showInfo("Soleil");
+    });
+  </script>
+</body>
+</html>
